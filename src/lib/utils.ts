@@ -117,8 +117,8 @@ export function processEmails(emails: Email[]): {
 }
 
 export function decodeEmailBody(body: EmailPayload): string {
-  if (body["mimeType"] === "multipart/alternative") {
-    return decodeEmailBody(body["parts"][0]);
+  if (body["mimeType"].startsWith("multipart/")) {
+    return body["parts"].map(decodeEmailBody).join("");
   } else if (body["mimeType"] === "text/plain") {
     return base64URLdecode(body["body"]["data"]).join("");
   } else if (body["mimeType"] === "text/html") {
